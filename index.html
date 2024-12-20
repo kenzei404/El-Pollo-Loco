@@ -1,18 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenzo run's</title>
+    <title>El Pollo Loco</title>
+    <link rel="icon" type="image" href="img_pollo_locco/img/4_enemie_boss_chicken/3_attack/G17.png">
+    <script src="classes/drawable-object.class.js"></script>
     <script src="classes/movable-js.class.js"></script>
-    <script src="classes/caracter.class.js"></script>
+    <script src="classes/statusbar.class.js"></script>
+    <script src="classes/coinbar.class.js"></script>
+    <script src="classes/bottlebar.class.js"></script>
+    <script src="classes/coin.class.js"></script>
+    <script src="classes/bottle.class.js"></script>
+    <script src="classes/character.class.js"></script>
     <script src="classes/chicken.class.js"></script>
-    <script src="../JavaScript/game.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <script src="classes/small-chicken.class.js"></script>
+    <script src="classes/endboss.class.js"></script>
+    <script src="classes/cloud.class.js"></script>
+    <script src="classes/background-object.class.js"></script>
+    <script src="classes/world.class.js"></script>
+    <script src="classes/keyboard.class.js"></script>
+    <script src="classes/gameOver.js"></script>
+    <script src="classes/youWin.js"></script>
+    <script src="classes/level.class.js"></script>
+    <script src="classes/throwable-object.class.js"></script>
+    <script src="levels/level1.js"></script>
+    <script src="JavaScript/game.js"></script>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 
-<body onload="init()">
-    <h1>Kenzo run's</h1>
-    <canvas id="canvas" width="720px" height="480px"></canvas>
+<body>
+    <img id="startScreen" class="startScreen" src="img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png" alt="">
+
+    <canvas id="canvas" width="720px" height="480px" class="d-none"></canvas>
+
+    <div class="startScreenButtons">
+        <button onclick="toggleControls()" id="controls">Controls</button>
+        <button onclick="init()" id="startButton" class="startButton">Spiel Starten</button>
+        <button onclick="goFullscreen()" id="fullscreenButton">Vollbild</button>
+    </div>
+
+    <div id="controlsDiv" class="controls" style="display: none;">
+        <div>JUMP = Space</div>
+        <div>Walk = Left/Right</div>
+        <div>Throw = Up</div>
+    </div>
 </body>
+
+
+
 </html>
