@@ -59,7 +59,9 @@ class ThrowableObject extends MovableObject {
             } else if (!this.isExploding) {
                 this.isExploding = true;
                 this.playAnimationOnce(this.IMAGES_BOTTLE_SPLASH);
+                if (!isMuted) {
                 this.glassBreakingSound();
+            }
             }
         }, 68);
     }
