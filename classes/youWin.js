@@ -2,6 +2,8 @@ class YouWin extends MovableObject {
 
     constructor() {
         super();  // Ensure the base class does not require parameters, or modify as necessary.
+        gameStop = true;
+        resetKeyboard();
         this.x = 0;   // Set x from the parameter.
         this.y = 0;   // Set y from the parameter.
         this.height = 480;

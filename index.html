@@ -31,14 +31,17 @@
 </head>
 
 <body>
+
     <img id="startScreen" class="startScreen" src="img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png" alt="">
 
     <canvas id="canvas" width="720px" height="480px" class="d-none"></canvas>
 
+    <img id="gameSound" class="gameSound" onclick="toggleMute()" src="img_pollo_locco/soundOn.png" alt="Sound Icon">
+
     <div class="startScreenButtons">
-        <button onclick="toggleControls()" id="controls">Controls</button>
+        <button onclick="toggleControls()" id="controls" class="controlButton" >Controls</button>
         <button onclick="init()" id="startButton" class="startButton">Spiel Starten</button>
-        <button onclick="goFullscreen()" id="fullscreenButton">Vollbild</button>
+        <button onclick="goFullscreen()" class="fullscreenButton" id="fullscreenButton">Vollbild</button>
     </div>
 
     <div id="controlsDiv" class="controls" style="display: none;">
@@ -46,6 +49,7 @@
         <div>Walk = Left/Right</div>
         <div>Throw = Up</div>
     </div>
+
 </body>
 
 

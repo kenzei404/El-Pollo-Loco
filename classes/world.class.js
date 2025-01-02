@@ -1,5 +1,8 @@
 class World {
     character = new Character();
+    coinSound = new Audio('sounds/coinSound.mp3');
+    game_sound = new Audio('sounds/242088_4401185-lq.mp3');
+    glass_sound = new Audio('sounds/glas shattering.mp3');
     level = level1;
     canvas;
     ctx;
@@ -36,22 +39,31 @@ class World {
             this.checkThrow();
             this.gameOver();
             this.checkEndbossHit();
-
+            this.gameSound();
+            this.checkThrowableObjectCollision(); // New function call
         }, 200);
+    
         setInterval(() => {
             this.collectCoins();
             this.collectBottles();
-
             this.checkCollisionWithEnemys();
-
         }, 20);
+    }
+
+    gameSound() {
+        if (!isMuted) {
+            this.game_sound.play();
+        } else {
+            this.game_sound.pause(); // Sound pausieren
+            this.game_sound.currentTime = 0; // Wiedergabezeit zurücksetzen
+        }
     }
 
     gameOver() {
         if (this.character.isDead()) {
             setTimeout(() => {
                 this.gameOverScreen = new GameOver(this.canvas.width / 2, this.canvas.height / 2);
-            }, 2000);
+            }, 500);
             setTimeout(()=>{
                 location.reload();
             }, 6000);
@@ -59,7 +71,7 @@ class World {
         if (this.level.endboss.isDead()) {
             setTimeout(() => {
                 this.gameOverScreen = new YouWin(this.canvas.width / 2, this.canvas.height / 2);
-            }, 2000);
+            }, 500);
             setTimeout(()=>{
                 location.reload();
             }, 6000);
@@ -78,11 +90,39 @@ class World {
             this.bottlebar.setPercentage(newPercentage);
         }
     }
+
+    checkThrowableObjectCollision() {
+        this.throwableObjects.forEach((throwableObject, index) => {
+            // Kollision mit Gegnern
+            this.level.enemies.forEach((enemy) => {
+                if (throwableObject.isColliding(enemy) && !throwableObject.isExploding && !enemy.isDead()) {
+                    enemy.hit(100); // Gegner treffen
+                    if (enemy.isDead()) enemy.loadImage(enemy.IMAGE_DEAD);
+                    throwableObject.triggerSplash();
+                }
+            });
+    
+            // Kollision mit Endboss
+            if (throwableObject.isColliding(this.level.endboss) && !throwableObject.isExploding) {
+                this.level.endboss.hit(10); // Endboss treffen
+                this.level.endbossStatusbar.setPercentage(this.level.endboss.energy);
+                throwableObject.triggerSplash();
+            }
+    
+            // Flasche entfernen, wenn markiert
+            if (throwableObject.markedForDeletion) {
+                this.throwableObjects.splice(index, 1);
+            }
+        });
+    }
+    
     
     collectCoins() {
         let totalCoins = this.level.coins.length + this.coinArr;
         for (let i = 0; i < this.level.coins.length; i++) {
             if (this.character.isColliding(this.level.coins[i])) {
+                if(!isMuted){
+                this.coinSound.play();}
                 this.coinArr++;
                 this.level.coins.splice(i, 1)
                 let newPercentage = (this.coinArr / totalCoins) * 100;
@@ -108,13 +148,12 @@ class World {
     checkEndbossHit() {
         this.throwableObjects.forEach((throwableObject) => {
             if (throwableObject.y < 320 && this.level.endboss.isColliding(throwableObject)) {
-                this.level.endboss.hit(10);
+                this.level.endboss.hit(5);
                 this.level.endboss.isHurt();
                 this.level.endbossStatusbar.setPercentage(this.level.endboss.energy);
             }
         });
     }
-    
 
     checkCollisionWithEndboss() {
         if (this.character.isColliding(this.level.endboss)) {
@@ -194,7 +233,6 @@ class World {
 
         mo.draw(this.ctx);
         this.ctx.rect(mo.x, mo.y, mo.width, mo.height);
-  
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);

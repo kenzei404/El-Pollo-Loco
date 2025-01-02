@@ -5,6 +5,7 @@ class Endboss extends MovableObject {
     height = 400;
     energy = 100;
     statusbar;
+    alertSound = new Audio('sounds/boss chicken.mp3')
  
 
     IMAGES_ALERT = [
@@ -58,7 +59,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.statusbar = new Statusbar(); 
-        this.energy = 150;
+        this.energy = 100;
         this.speed = 30;
         this.x = 3500;
         this.animate();
@@ -69,10 +70,14 @@ class Endboss extends MovableObject {
         setInterval(() => {
             this.endbossStatus();
             if (i < 8){
-            this.playAnimation(this.IMAGES_ALERT);}
+            this.playAnimation(this.IMAGES_ALERT);
+            this.playEnbossAlert();
+            this.index = 0;
+            }
             if (i > 8 && this.hadFirstContact){
                 this.playAnimation(this.IMAGES_WALKING)
                 this.huntCharacter()
+  
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
@@ -88,6 +93,12 @@ class Endboss extends MovableObject {
             }
         }, 200);
     }
+
+    playEnbossAlert(){
+        if(this.index == 0 && !isMuted) {
+            this.alertSound.play();
+            }
+        }
     
     
     huntCharacter() {
