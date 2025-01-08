@@ -31,25 +31,33 @@
 </head>
 
 <body>
+    <div class="overlay"  >
 
-    <img id="startScreen" class="startScreen" src="img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png"
-        alt="">
-    <div class="canvas-container">
-        <canvas id="canvas" width="720px" height="480px" class="d-none"></canvas>
+        <img id="startScreen" class="startScreen"
+            src="img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png" alt="">
+        <div class="canvas-container">
+            <canvas id="canvas" width="720px" height="480px" class="d-none"></canvas>
+        </div>
+        <img id="gameSound" class="gameSound" onclick="toggleMute()" src="img_pollo_locco/soundOn.png" alt="Sound Icon">
+
+        <div class="startScreenButtons">
+            <button onclick="init()" id="startButton" class="startButton">Play!</button>
+            <button onclick="toggleControls()" id="controls" class="controlButton">Show controls</button>
+        </div>
+
+        <div id="controlsDiv" class="controls" style="display: none;">
+            <div>JUMP = Space</div>
+            <div>Walk = Left/Right</div>
+            <div>Throw = Up</div>
+        </div>
+
+        <div class="overlay-content d-none" id="gameOverOverlay">
+            <h1>Do you want to play again?</h1>
+            <button onclick="init()">Yes</button>
+            <button onclick="location.reload()">No</button>
+        </div>
+
     </div>
-    <img id="gameSound" class="gameSound" onclick="toggleMute()" src="img_pollo_locco/soundOn.png" alt="Sound Icon">
-
-    <div class="startScreenButtons">
-        <button onclick="init()" id="startButton" class="startButton">Play!</button>
-        <button onclick="toggleControls()" id="controls" class="controlButton">Show controls</button>
-    </div>
-
-    <div id="controlsDiv" class="controls" style="display: none;">
-        <div>JUMP = Space</div>
-        <div>Walk = Left/Right</div>
-        <div>Throw = Up</div>
-    </div>
-
 </body>
 
 

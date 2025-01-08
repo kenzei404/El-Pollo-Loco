@@ -64,19 +64,24 @@ class World {
             setTimeout(() => {
                 this.gameOverScreen = new GameOver(this.canvas.width / 2, this.canvas.height / 2);
             }, 500);
-            setTimeout(()=>{
-                location.reload();
-            }, 6000);
+            setTimeout(() => {
+                this.showGameOverOverlay(); // Zeige das Overlay an
+            }, 6000); // Verzögerung, damit das GameOver-Bild zuerst angezeigt wird
         } 
         if (this.level.endboss.isDead()) {
             setTimeout(() => {
                 this.gameOverScreen = new YouWin(this.canvas.width / 2, this.canvas.height / 2);
             }, 500);
-            setTimeout(()=>{
-                location.reload();
+            setTimeout(() => {
+                this.showGameOverOverlay(); // Zeige das Overlay an
             }, 6000);
         }
     }
+    
+    showGameOverOverlay() {
+        const overlay = document.getElementById('gameOverOverlay');
+        overlay.classList.remove('d-none');
+    }    
     
     checkThrow() {
         if (this.keyboard.THROW && this.bottleArr > 0) {

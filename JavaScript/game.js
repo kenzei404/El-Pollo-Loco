@@ -14,7 +14,6 @@ function init() {
     document.getElementById('canvas').classList.remove('d-none');
     document.getElementById('controlsDiv').style.display = 'none';
     document.getElementById('gameSound').style.marginBottom = '420px';
-
 }
 
 function toggleControls() {
