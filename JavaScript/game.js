@@ -10,7 +10,6 @@ function init() {
     world = new World(canvas, keyboard);
     document.getElementById('startScreen').classList.add('d-none');
     document.getElementById('controls').classList.add('d-none');
-    document.getElementById('fullscreenButton').classList.add('d-none');
     document.getElementById('startButton').classList.add('d-none');
     document.getElementById('canvas').classList.remove('d-none');
     document.getElementById('controlsDiv').style.display = 'none';
@@ -62,20 +61,15 @@ function toggleMute() {
 function restoreMuteState() {
     const savedMuteState = localStorage.getItem('isMuted'); // Zustand aus localStorage lesen
     if (savedMuteState !== null) {
-        isMuted = JSON.parse(savedMuteState); // In Boolean umwandeln
+        isMuted = JSON.parse(savedMuteState); 
     }
-
-    // Button-Bild entsprechend dem Zustand einstellen
     const muteButton = document.getElementById('gameSound');
     muteButton.src = isMuted
         ? "img_pollo_locco/soundOff.png"
         : "img_pollo_locco/soundOn.png";
-
-    // Alle Audio-Elemente entsprechend stummschalten/aktivieren
     document.querySelectorAll('audio, video').forEach(media => {
         media.muted = isMuted;
     });
-
     if (window.allAudioObjects) {
         window.allAudioObjects.forEach(audioObj => {
             if (isMuted) {

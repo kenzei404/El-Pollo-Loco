@@ -19,8 +19,6 @@ class MovableObject extends DrawableObject {
         return collision;
     }
     
-    
-
     hit(x) {
         this.energy -= x;
         if (this.energy < 0) {
@@ -52,11 +50,12 @@ class MovableObject extends DrawableObject {
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
-            return true
+            return this.y < 320; // Gravitation stoppt, wenn die Flasche den Boden erreicht
         } else {
-            return this.y < 180
+            return this.y < 180; // Standard für andere Objekte
         }
     }
+    
 
     moveRight() {
         this.x += this.speed;
@@ -83,7 +82,5 @@ class MovableObject extends DrawableObject {
             }
         }
     }
-    
-
 }
 

@@ -14,7 +14,7 @@ class Character extends MovableObject {
         'img_pollo_locco/img/2_character_pepe/2_walk/W-26.png'
     ];
 
-    IMAGES_IDLE = [
+    IMAGES_IDLE_SHORT = [
         'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-1.png',
         'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-2.png',
         'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-3.png',
@@ -25,16 +25,20 @@ class Character extends MovableObject {
         'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-8.png',
         'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-9.png',
         'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-10.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-11.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-12.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-13.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-14.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-15.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-16.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-17.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-18.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-19.png',
-        'img_pollo_locco/img/2_character_pepe/1_idle/idle/I-20.png',
+
+    ];
+
+    IMAGES_IDLE_LONG = [
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-11.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-12.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-13.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-14.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-15.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-16.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-17.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-18.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-19.png',
+        'img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-20.png',
     ];
 
     IMAGES_JUMPING = [
@@ -66,7 +70,7 @@ class Character extends MovableObject {
     ]
 
     constructor() {
-        super().loadImage('img_pollo_locco/img/2_character_pepe/2_walk/W-21.png');
+        super().loadImage('img_pollo_locco/img/2_character_pepe/1_idle/idle/I-1.png');
         this.running_sound = new Audio('sounds/pepe_walking.wav');
         if (!window.allAudioObjects) {
             window.allAudioObjects = [];
@@ -76,18 +80,19 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DIES);
         this.loadImages(this.IMAGES_HURT);
-        this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_IDLE_SHORT);
+        this.loadImages(this.IMAGES_IDLE_LONG);
         this.animate();
         this.applyGravity();
     }
-    
+
 
     isColliding(mo) {
         const offsetX = 20;
         const offsetY = 100;
         const reducedWidth = 40;
         const reducedHeight = 100;
-    
+
         const collision = (
             this.x + offsetX + (this.width - reducedWidth) > mo.x &&
             this.x + offsetX < mo.x + mo.width &&
@@ -99,38 +104,39 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            this.running_sound.pause(); // Standardmäßig pausieren
+            this.running_sound.pause(); 
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 if (!isMuted) {
-                    this.running_sound.play(); // Nur abspielen, wenn nicht gemutet
+                    this.running_sound.play(); 
                 }
                 this.otherDirection = false;
             }
-    
+
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();
                 if (!isMuted) {
-                    this.running_sound.play(); // Nur abspielen, wenn nicht gemutet
+                    this.running_sound.play(); 
                 }
                 this.otherDirection = true;
             }
-    
+
             if (this.world.keyboard.JUMP && !this.isAboveGround()) {
                 this.jump();
             }
             this.world.camera_x = -this.x + 120;
         }, 1000 / 60);
-    
+
         setInterval(() => {
             if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
+            } else if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+                this.startIdleAnimation(); 
             } else {
-                this.loadImage('img_pollo_locco/img/2_character_pepe/2_walk/W-21.png');
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                }
+                this.isIdleActive = false; 
+                this.playAnimation(this.IMAGES_WALKING); // Animation beim Laufen
             }
+        
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DIES);
             }
@@ -138,12 +144,49 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             }
         }, 1000 / 10);
+        
     }
-    
-
 
     jump() {
         return this.speedY = 25;
     }
+
+    startIdleAnimation() {
+        // Starte Idle-Animation nur, wenn keine Bewegung stattfindet
+        if (!this.isIdleActive && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+            this.isIdleActive = true;
+            // Spielt zuerst die kurze Idle-Animation ab
+            this.playAnimationOnce(this.IMAGES_IDLE_SHORT, () => {
+                // Nach der kurzen Animation wird die lange in Endlosschleife abgespielt
+                this.startLongIdleAnimation();
+            });
+        }
+    }
+    
+    
+    startLongIdleAnimation() {
+        this.idleInterval = setInterval(() => {
+            if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+                this.playAnimation(this.IMAGES_IDLE_LONG); // Endlosschleife für lange Animation
+            } else {
+                clearInterval(this.idleInterval); // Beende die Idle-Animation, wenn Bewegung beginnt
+                this.isIdleActive = false;
+            }
+        }, 300); 
+    }
+    
+    playAnimationOnce(images, callback) {
+        let index = 0;
+        let interval = setInterval(() => {
+            if (index < images.length) {
+                this.img = this.imageCache[images[index]];
+                index++;
+            } else {
+                clearInterval(interval); // Stoppe die Animation
+                if (callback) callback(); // Führe den Callback aus
+            }
+        }, 150); 
+    }
+
 };
 

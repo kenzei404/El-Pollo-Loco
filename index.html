@@ -27,21 +27,21 @@
     <script src="classes/throwable-object.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="JavaScript/game.js"></script>
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <img id="startScreen" class="startScreen" src="img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png" alt="">
-
-    <canvas id="canvas" width="720px" height="480px" class="d-none"></canvas>
-
+    <img id="startScreen" class="startScreen" src="img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png"
+        alt="">
+    <div class="canvas-container">
+        <canvas id="canvas" width="720px" height="480px" class="d-none"></canvas>
+    </div>
     <img id="gameSound" class="gameSound" onclick="toggleMute()" src="img_pollo_locco/soundOn.png" alt="Sound Icon">
 
     <div class="startScreenButtons">
-        <button onclick="toggleControls()" id="controls" class="controlButton" >Controls</button>
-        <button onclick="init()" id="startButton" class="startButton">Spiel Starten</button>
-        <button onclick="goFullscreen()" class="fullscreenButton" id="fullscreenButton">Vollbild</button>
+        <button onclick="init()" id="startButton" class="startButton">Play!</button>
+        <button onclick="toggleControls()" id="controls" class="controlButton">Show controls</button>
     </div>
 
     <div id="controlsDiv" class="controls" style="display: none;">

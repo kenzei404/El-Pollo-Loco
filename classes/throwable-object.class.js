@@ -1,5 +1,4 @@
 class ThrowableObject extends MovableObject {
-
     glass_sound = new Audio('sounds/glas shattering.mp3');
 
     IMAGES_BOTTLE = [
@@ -7,7 +6,7 @@ class ThrowableObject extends MovableObject {
         'img_pollo_locco/img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
         'img_pollo_locco/img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
         'img_pollo_locco/img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
-    ]
+    ];
 
     IMAGES_BOTTLE_SPLASH = [
         'img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
@@ -16,60 +15,60 @@ class ThrowableObject extends MovableObject {
         'img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
         'img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
         'img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png',
-        ''
-    ]
+    ];
 
-    constructor(x, y, throwableObjects) {
+    constructor(x, y, otherDirection) {
         super();
         this.isExploding = false;
-        this.loadImage('img_pollo_locco/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png')
+        this.soundPlayed = false;
+        this.loadImage(this.IMAGES_BOTTLE[0]);
         this.loadImages(this.IMAGES_BOTTLE);
         this.loadImages(this.IMAGES_BOTTLE_SPLASH);
-        this.throwableObjects = throwableObjects;
         this.x = x;
         this.y = y;
         this.height = 100;
         this.width = 90;
+        this.otherDirection = otherDirection;
+        this.speedY = 20;
+        this.applyGravity();
         this.throw();
-        this.i = 0;
+        this.i = 0; // Animation Frame Index
     }
 
     throw() {
-        this.speedY = 20;
-        this.applyGravity();
-        let move = () => {
-            if (this.y < 320) {
-                if (this.otherDirection) {
-                    this.x -= 1.1;
-                } else {
-                    this.x += 1.1;
-                }
-            } else {
-                this.speedY = 0;
-                this.isExploding = true; // Splash-Animation starten
-                this.playAnimationOnce(this.IMAGES_BOTTLE_SPLASH);
+        const move = () => {
+            if (this.y >= 320) {
+                this.triggerSplash(); // Splash bei Bodenberührung
+                return; // Bewegung beenden
+            }
+            if (!this.isExploding) {
+                this.x += this.otherDirection ? -1.1 : 1.1; // Seitliche Bewegung
             }
             requestAnimationFrame(move);
         };
         move();
     
         setInterval(() => {
-            if (this.y < 320) {
+            if (this.y < 320 && !this.isExploding) {
                 this.playAnimation(this.IMAGES_BOTTLE);
-            } else if (!this.isExploding) {
-                this.isExploding = true;
-                this.playAnimationOnce(this.IMAGES_BOTTLE_SPLASH);
-                if (!isMuted) {
-                this.glassBreakingSound();
             }
-            }
-        }, 68);
+        }, 108);
     }
     
+
+    triggerSplash() {
+        if (!this.isExploding) {
+            this.isExploding = true;
+            this.speedY = 0; // Vertikale Bewegung stoppen
+            this.playAnimationOnce(this.IMAGES_BOTTLE_SPLASH); // Splash-Animation
+            this.glassBreakingSound(); // Sound abspielen
+        }
+    }
+
     glassBreakingSound() {
-        if (!this.soundPlayed) { // Neue Eigenschaft prüfen
+        if (!this.soundPlayed && !isMuted) {
             this.glass_sound.play();
-            this.soundPlayed = true; // Markiert, dass der Sound abgespielt wurde
+            this.soundPlayed = true; // Verhindert mehrfaches Abspielen
         }
     }
 
@@ -78,20 +77,10 @@ class ThrowableObject extends MovableObject {
             let path = images[this.i];
             this.img = this.imageCache[path];
             this.i++;
+            setTimeout(() => this.playAnimationOnce(images), 108); // Zeit pro Frame
         } else {
-            this.isExploding = false; // Splash-Animation beendet
-            this.markedForDeletion = true; // Markiere das Objekt zur Entfernung
+            this.markedForDeletion = true; // Nach der Animation entfernen
         }
     }
-
-    triggerSplash() {
-        this.isExploding = true;
-        this.playAnimationOnce(this.IMAGES_BOTTLE_SPLASH); // Splash-Animation
-        this.glassBreakingSound(); // Sound abspielen
-        setTimeout(() => {
-            this.markedForDeletion = true; // Nach Animation entfernen
-        }, 300);
-    }
+    
 }
-
-
