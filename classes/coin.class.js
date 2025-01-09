@@ -5,14 +5,14 @@ class Coin extends DrawableObject {
     constructor(x) {
         super().loadImage(x);
         this.x = 400 + Math.random() * 3000; // Generiert eine zufällige x-Position
-        this.y = 100 + Math.random() * 100;    // Generiert eine zufällige y-Position
+       // Generiert eine zufällige y-Position
     }
 
     isColliding(mo) {
         const offsetX = 50;
         const offsetY = 50;
         const reducedWidth = 100;
-        const reducedHeight = 100;
+        const reducedHeight = 0;
     
         const collision = (
             this.x + offsetX + (this.width - reducedWidth) > mo.x &&

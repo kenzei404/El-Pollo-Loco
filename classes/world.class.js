@@ -18,16 +18,32 @@ class World {
     coin;
     throwedObjects = 0;
     gameOverScreen = null;
+    endTime = null; // Zeitpunkt, an dem das Spiel endet
+    isGameOverTriggered = false; // Neues Flag in der World-Klasse
 
 
     constructor(canvas, keyboard) {
+        this.isGameOver = false; // Flag für Spielende
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.startTime = Date.now(); // Startzeit des Spiels
+        this.collectedCoins = 0; // Gesammelte Coins
+        this.totalCoins = this.level.coins.length;
         this.draw();
         this.setWorld();
         this.run();
     };
+
+    endGame() {
+        this.isGameOver = true;
+    }
+
+    getElapsedTime() {
+        const endTime = this.endTime ? this.endTime : Date.now(); // Endzeit oder aktuelle Zeit
+        const elapsedTime = (endTime - this.startTime) / 1000; // Zeit in Sekunden
+        return elapsedTime.toFixed(2); // Auf 2 Nachkommastellen
+    }
 
     setWorld() {
         this.character.world = this;
@@ -59,29 +75,52 @@ class World {
         }
     }
 
-    gameOver() {
-        if (this.character.isDead()) {
-            setTimeout(() => {
-                this.gameOverScreen = new GameOver(this.canvas.width / 2, this.canvas.height / 2);
-            }, 500);
-            setTimeout(() => {
-                this.showGameOverOverlay(); // Zeige das Overlay an
-            }, 6000); // Verzögerung, damit das GameOver-Bild zuerst angezeigt wird
-        } 
-        if (this.level.endboss.isDead()) {
-            setTimeout(() => {
+    handleGameOver(isWin) {
+        this.isGameOverTriggered = true; // Markiere, dass das Spiel vorbei ist
+        this.endTime = Date.now(); // Endzeitpunkt speichern
+        setTimeout(() => {
+            if (isWin) {
                 this.gameOverScreen = new YouWin(this.canvas.width / 2, this.canvas.height / 2);
-            }, 500);
-            setTimeout(() => {
-                this.showGameOverOverlay(); // Zeige das Overlay an
-            }, 6000);
-        }
+            } else {
+                this.gameOverScreen = new GameOver(this.canvas.width / 2, this.canvas.height / 2);
+            }
+        }, 500);
+        setTimeout(() => {
+            this.endGame(); // Stoppe die Zeichen-Schleife
+            this.showEndScreen(isWin); // Zeige entsprechenden Endbildschirm
+        }, 5000);
     }
     
-    showGameOverOverlay() {
-        const overlay = document.getElementById('gameOverOverlay');
-        overlay.classList.remove('d-none');
+    gameOver() {
+        if (this.isGameOverTriggered) return; // Funktion verlassen, wenn sie bereits ausgelöst wurde
+    
+        if (this.character.isDead()) {
+            this.handleGameOver(false); // Game Over
+        }
+    
+        if (this.level.endboss.isDead()) {
+            this.handleGameOver(true); // You Win
+        }
     }    
+
+    showEndScreen(isWin) {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.font = '64px MexicanFont';
+        ctx.textAlign = 'center';
+        const title = isWin ? 'You Win!' : 'You Lost!';
+        ctx.fillText(title, this.canvas.width / 2, 100);
+        const coinPercentage = Math.round((this.coinArr / this.totalCoins) * 100);
+        const elapsedTime = this.getElapsedTime();
+        ctx.font = '20px MexicanFont';
+        ctx.fillText(`Coins Collected: ${coinPercentage}%`, this.canvas.width / 2, 200);
+        ctx.fillText(`Time Played: ${elapsedTime} seconds`, this.canvas.width / 2, 250);
+        ctx.fillText('Do you want to play again?', this.canvas.width / 2, 350);
+        ctx.fillText('Press "R" to Restart', this.canvas.width / 2, 400);
+    }
     
     checkThrow() {
         if (this.keyboard.THROW && this.bottleArr > 0) {
@@ -98,7 +137,6 @@ class World {
 
     checkThrowableObjectCollision() {
         this.throwableObjects.forEach((throwableObject, index) => {
-            // Kollision mit Gegnern
             this.level.enemies.forEach((enemy) => {
                 if (throwableObject.isColliding(enemy) && !throwableObject.isExploding && !enemy.isDead()) {
                     enemy.hit(100); // Gegner treffen
@@ -106,15 +144,11 @@ class World {
                     throwableObject.triggerSplash();
                 }
             });
-    
-            // Kollision mit Endboss
             if (throwableObject.isColliding(this.level.endboss) && !throwableObject.isExploding) {
                 this.level.endboss.hit(10); // Endboss treffen
                 this.level.endbossStatusbar.setPercentage(this.level.endboss.energy);
                 throwableObject.triggerSplash();
             }
-    
-            // Flasche entfernen, wenn markiert
             if (throwableObject.markedForDeletion) {
                 this.throwableObjects.splice(index, 1);
             }
@@ -162,9 +196,11 @@ class World {
 
     checkCollisionWithEndboss() {
         if (this.character.isColliding(this.level.endboss)) {
-            this.character.hit(5);
-            this.character.isHurt();
-            this.statusbar.setPercentage(this.character.energy)
+            if (this.level.endboss.isDangerous) {
+                this.character.hit(1);
+                this.character.isHurt();
+                this.statusbar.setPercentage(this.character.energy);
+            }
         };
     }
 
@@ -196,8 +232,10 @@ class World {
     }
 
     draw() {
+        if (this.isGameOver) {
+            return; 
+        }
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
         this.ctx.translate(-this.camera_x, 0);
@@ -217,12 +255,9 @@ class World {
         if (this.gameOverScreen) {
             this.gameOverScreen.draw(this.ctx);
         }
-    
-        // Selbstverweis (für Animation Loop)
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        if (!this.isGameOver) {
+            requestAnimationFrame(() => this.draw());
+        }
     }
     
     addObjectsToMap(objects) {

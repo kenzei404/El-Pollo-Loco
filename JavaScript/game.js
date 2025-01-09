@@ -5,6 +5,12 @@ let keyboard = new Keyboard();
 let fullscreenButton = document.getElementById('fullscreenButton');
 
 function init() {
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'r') { // "R" für Neustart
+            console.log('Spiel wird neu gestartet');
+            window.location.reload();
+        }
+    });
     initLevel1();
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);

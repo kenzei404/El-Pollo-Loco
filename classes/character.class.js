@@ -104,75 +104,83 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            this.running_sound.pause(); 
+            this.running_sound.pause();
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+                this.isIdleActive = false;
                 this.moveRight();
                 if (!isMuted) {
-                    this.running_sound.play(); 
+                    this.running_sound.play();
                 }
                 this.otherDirection = false;
             }
-
             if (this.world.keyboard.LEFT && this.x > 0) {
+                this.isIdleActive = false;
                 this.moveLeft();
                 if (!isMuted) {
-                    this.running_sound.play(); 
+                    this.running_sound.play();
                 }
                 this.otherDirection = true;
             }
-
             if (this.world.keyboard.JUMP && !this.isAboveGround()) {
+                this.isIdleActive = false;
                 this.jump();
             }
             this.world.camera_x = -this.x + 120;
         }, 1000 / 60);
-
+    
         setInterval(() => {
             if (this.isAboveGround()) {
+                this.isIdleActive = false;
                 this.playAnimation(this.IMAGES_JUMPING);
             } else if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
-                this.startIdleAnimation(); 
+                this.startIdleAnimation();
+                this.isIdleActive = true;
+
             } else {
-                this.isIdleActive = false; 
-                this.playAnimation(this.IMAGES_WALKING); // Animation beim Laufen
+                this.isIdleActive = false;
+                this.playAnimation(this.IMAGES_WALKING);
             }
-        
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DIES);
+                this.isIdleActive = false;
             }
             if (this.isHurt() && this.y > 175) {
                 this.playAnimation(this.IMAGES_HURT);
+                this.isIdleActive = false;
             }
         }, 1000 / 10);
-        
     }
-
+    
     jump() {
         return this.speedY = 25;
     }
 
     startIdleAnimation() {
-        // Starte Idle-Animation nur, wenn keine Bewegung stattfindet
         if (!this.isIdleActive && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
             this.isIdleActive = true;
-            // Spielt zuerst die kurze Idle-Animation ab
             this.playAnimationOnce(this.IMAGES_IDLE_SHORT, () => {
-                // Nach der kurzen Animation wird die lange in Endlosschleife abgespielt
                 this.startLongIdleAnimation();
             });
         }
     }
     
-    
     startLongIdleAnimation() {
         this.idleInterval = setInterval(() => {
             if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
-                this.playAnimation(this.IMAGES_IDLE_LONG); // Endlosschleife für lange Animation
+                this.playAnimation(this.IMAGES_IDLE_LONG);
             } else {
-                clearInterval(this.idleInterval); // Beende die Idle-Animation, wenn Bewegung beginnt
+                clearInterval(this.idleInterval);
                 this.isIdleActive = false;
             }
         }, 300); 
+    }
+
+    stopIdleAnimation() {
+        if (this.idleInterval) {
+            clearInterval(this.idleInterval);
+            this.idleInterval = null;
+        }
+        this.isIdleActive = false;
     }
     
     playAnimationOnce(images, callback) {
@@ -182,11 +190,10 @@ class Character extends MovableObject {
                 this.img = this.imageCache[images[index]];
                 index++;
             } else {
-                clearInterval(interval); // Stoppe die Animation
-                if (callback) callback(); // Führe den Callback aus
+                clearInterval(interval);
+                if (callback) callback();
             }
         }, 150); 
     }
 
 };
-
