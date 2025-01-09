@@ -21,7 +21,6 @@ class World {
     endTime = null; // Zeitpunkt, an dem das Spiel endet
     isGameOverTriggered = false; // Neues Flag in der World-Klasse
 
-
     constructor(canvas, keyboard) {
         this.isGameOver = false; // Flag für Spielende
         this.ctx = canvas.getContext('2d');
@@ -119,7 +118,7 @@ class World {
         ctx.fillText(`Coins Collected: ${coinPercentage}%`, this.canvas.width / 2, 200);
         ctx.fillText(`Time Played: ${elapsedTime} seconds`, this.canvas.width / 2, 250);
         ctx.fillText('Do you want to play again?', this.canvas.width / 2, 350);
-        ctx.fillText('Press "R" to Restart', this.canvas.width / 2, 400);
+        ctx.fillText('Press "R" on PC or "Reset" on Mobile to Restart', this.canvas.width / 2, 400);
     }
     
     checkThrow() {

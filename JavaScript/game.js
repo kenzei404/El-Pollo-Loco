@@ -7,7 +7,6 @@ let fullscreenButton = document.getElementById('fullscreenButton');
 function init() {
     document.addEventListener('keydown', (event) => {
         if (event.key === 'r') { // "R" für Neustart
-            console.log('Spiel wird neu gestartet');
             window.location.reload();
         }
     });
@@ -17,9 +16,14 @@ function init() {
     document.getElementById('startScreen').classList.add('d-none');
     document.getElementById('controls').classList.add('d-none');
     document.getElementById('startButton').classList.add('d-none');
-    document.getElementById('canvas').classList.remove('d-none');
+    document.getElementById('canvas').classList.remove('d-none'); 
+    document.getElementById('touchButtons').classList.remove('d-none'); // Nur hier sichtbar machen
     document.getElementById('controlsDiv').style.display = 'none';
     document.getElementById('gameSound').style.marginBottom = '420px';
+}
+
+function resetGame(){
+    window.location.reload();
 }
 
 function toggleControls() {
@@ -35,12 +39,8 @@ let isMuted = false;
 
 function toggleMute() {
     const muteButton = document.getElementById('gameSound');
-    isMuted = !isMuted; // Zustand umschalten
-
-    // Zustand im localStorage speichern
+    isMuted = !isMuted; 
     localStorage.setItem('isMuted', isMuted);
-
-    // Alle HTML-Audio-Elemente stummschalten/aktivieren
     document.querySelectorAll('audio, video').forEach(media => {
         media.muted = isMuted;
     });
@@ -54,8 +54,6 @@ function toggleMute() {
             }
         });
     }
-
-    // Button-Bild ändern
     muteButton.src = isMuted
         ? "img_pollo_locco/soundOff.png"
         : "img_pollo_locco/soundOn.png";
@@ -64,7 +62,7 @@ function toggleMute() {
 }
 
 function restoreMuteState() {
-    const savedMuteState = localStorage.getItem('isMuted'); // Zustand aus localStorage lesen
+    const savedMuteState = localStorage.getItem('isMuted'); 
     if (savedMuteState !== null) {
         isMuted = JSON.parse(savedMuteState); 
     }
@@ -89,7 +87,7 @@ window.addEventListener('load', restoreMuteState);
 let gameStop = false;
 
 document.addEventListener("keydown", (e) => {
-    if (gameStop) return; // Beende die Verarbeitung, wenn das Spiel gestoppt ist
+    if (gameStop) return;
 
     if (e.keyCode == 37) {
         keyboard.LEFT = true;
@@ -109,7 +107,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener("keyup", (e) => {
-    if (gameStop) return; // Beende die Verarbeitung, wenn das Spiel gestoppt ist
+    if (gameStop) return;
 
     if (e.keyCode == 37) {
         keyboard.LEFT = false;

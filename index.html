@@ -32,6 +32,10 @@
 
 <body>
 
+    <div id="orientationWarning" class="orientation-warning">
+        <h1>Turn your device to play the game</h1>
+    </div>
+
     <img id="startScreen" class="startScreen" src="img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png"
         alt="">
     <div class="canvas-container">
@@ -48,7 +52,7 @@
         <div>
             <div>JUMP = Space</div>
             <div>Throw = Up</div>
-           
+
         </div>
         <div>
             <div>Walk = Left/Right Arrow</div>
@@ -56,8 +60,19 @@
         </div>
     </div>
 
+    <div id="touchButtons" class="touch-buttons d-none">
+        <div class="touch-button-side">
+            <button class="touch-button" onclick="keyboard.LEFT = true; setTimeout(() => keyboard.LEFT = false, 200);">Left</button>
+            <button class="touch-button" onclick="keyboard.RIGHT = true; setTimeout(() => keyboard.RIGHT = false, 200);">Right</button>
+        </div>
+        <div>
+            <button class="reset-button" onclick="resetGame()">Reset</button>
+        </div>
+        <div class="touch-button-side">
+            <button class="touch-button" onclick="keyboard.JUMP = true; setTimeout(() => keyboard.JUMP = false, 200);">Jump</button>
+            <button class="touch-button" onclick="keyboard.THROW = true; setTimeout(() => keyboard.THROW = false, 200);">Throw</button>
+        </div>
+    </div>
+
 </body>
-
-
-
 </html>

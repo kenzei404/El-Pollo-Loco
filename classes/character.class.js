@@ -134,6 +134,7 @@ class Character extends MovableObject {
             if (this.isAboveGround()) {
                 this.isIdleActive = false;
                 this.playAnimation(this.IMAGES_JUMPING);
+                this.stopIdleAnimation(); 
             } else if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
                 this.startIdleAnimation();
                 this.isIdleActive = true;
@@ -141,14 +142,17 @@ class Character extends MovableObject {
             } else {
                 this.isIdleActive = false;
                 this.playAnimation(this.IMAGES_WALKING);
+                this.stopIdleAnimation(); 
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DIES);
                 this.isIdleActive = false;
+                this.stopIdleAnimation(); 
             }
             if (this.isHurt() && this.y > 175) {
                 this.playAnimation(this.IMAGES_HURT);
                 this.isIdleActive = false;
+                this.stopIdleAnimation(); 
             }
         }, 1000 / 10);
     }
@@ -185,7 +189,7 @@ class Character extends MovableObject {
             } else {
                 this.stopIdleAnimation(); // Bewegung stoppt alles
             }
-        }, 150); // Zeit pro Frame (entsprechend der Animationsgeschwindigkeit)
+        }, 300); // Zeit pro Frame (entsprechend der Animationsgeschwindigkeit)
     }
     
     stopIdleAnimation() {
