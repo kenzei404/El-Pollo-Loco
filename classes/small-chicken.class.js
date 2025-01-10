@@ -1,11 +1,11 @@
-class SmallChicken extends MovableObject{
+class SmallChicken extends MovableObject {
 
     energy = 100;
     height = 70;
     width = 70;
     y = 350;
 
-    chickenDeadSound = new Audio('sounds/small chick dead.mp3') 
+    chickenDeadSound = new Audio('sounds/small chick dead.mp3')
 
     IMAGES_WALKING = [
         'img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
@@ -15,9 +15,7 @@ class SmallChicken extends MovableObject{
 
     IMAGE_DEAD = ['img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png']
 
-
-
-    constructor(){
+    constructor() {
         super().loadImage('img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.x = 1000 + Math.random() * 3000;
@@ -29,14 +27,15 @@ class SmallChicken extends MovableObject{
     animate() {
         setInterval(() => {
             if (!this.isDead()) {
-                this.moveLeft(); // Nur bewegen, wenn das Huhn nicht tot ist
+                this.moveLeft();
             }
         }, 1000 / 60);
-    
+
         setInterval(() => {
             if (this.isDead()) {
-                if(!isMuted) {
-                this.playSmallDeadChickenSound();}
+                if (!isMuted) {
+                    this.playSmallDeadChickenSound();
+                }
                 this.loadImage(this.IMAGE_DEAD);
                 this.index++;
             } else {
@@ -47,11 +46,11 @@ class SmallChicken extends MovableObject{
             }
         }, 120 + Math.random() * 10);
     }
-    
+
     playSmallDeadChickenSound() {
-        if(this.index == 0) {
-        this.chickenDeadSound.play();
+        if (this.index == 0) {
+            this.chickenDeadSound.play();
         }
     }
-    
+
 }

@@ -13,19 +13,18 @@ class Chicken extends MovableObject {
 
     IMAGE_DEAD = ['img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png']
 
-constructor() {
-    super().loadImage('img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
-    this.loadImages(this.IMAGES_WALKING);
-    this.x = 1000 + Math.random() * 3000;
-    this.speed = 2 + Math.random() * 0.25;
-    if (!window.allAudioObjects) {
-        window.allAudioObjects = [];
+    constructor() {
+        super().loadImage('img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
+        this.loadImages(this.IMAGES_WALKING);
+        this.x = 1000 + Math.random() * 3000;
+        this.speed = 2 + Math.random() * 0.25;
+        if (!window.allAudioObjects) {
+            window.allAudioObjects = [];
+        }
+        window.allAudioObjects.push(this.deadChickenSound); // Registrierung
+        this.animate();
+        this.index = 0;
     }
-    window.allAudioObjects.push(this.deadChickenSound); // Registrierung
-    this.animate();
-    this.index = 0;
-}
-
 
     animate() {
         setInterval(() => {
@@ -33,9 +32,9 @@ constructor() {
                 this.moveLeft();
             }
         }, 1000 / 60);
-    
+
         setInterval(() => {
-            if (this.isDead() ) {
+            if (this.isDead()) {
                 this.playDeadChickenSound();
                 this.loadImage(this.IMAGE_DEAD);
                 this.index++;

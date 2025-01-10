@@ -1,8 +1,8 @@
 class GameOver extends MovableObject {
     constructor() {
         super();
-        gameStop = true; // Spielsteuerung deaktivieren
-        resetKeyboard(); // Alle Tasteneingaben stoppen
+        gameStop = true;
+        resetKeyboard();
         this.x = 0;
         this.y = 0;
         this.height = 480;

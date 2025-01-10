@@ -1,11 +1,10 @@
 class Coin extends DrawableObject {
-    height = 150;  // Visuelle Größe
-    width = 150;   // Visuelle Größe
+    height = 150;
+    width = 150;
 
     constructor(x) {
         super().loadImage(x);
-        this.x = 400 + Math.random() * 3000; // Generiert eine zufällige x-Position
-       // Generiert eine zufällige y-Position
+        this.x = 400 + Math.random() * 3000;
     }
 
     isColliding(mo) {
@@ -13,7 +12,7 @@ class Coin extends DrawableObject {
         const offsetY = 50;
         const reducedWidth = 100;
         const reducedHeight = 0;
-    
+
         const collision = (
             this.x + offsetX + (this.width - reducedWidth) > mo.x &&
             this.x + offsetX < mo.x + mo.width &&

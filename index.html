@@ -44,35 +44,103 @@
     <img id="gameSound" class="gameSound" onclick="toggleMute()" src="img_pollo_locco/soundOn.png" alt="Sound Icon">
 
     <div class="startScreenButtons">
-        <button onclick="init()" id="startButton" class="startButton">Play!</button>
-        <button onclick="toggleControls()" id="controls" class="controlButton">Show controls</button>
+        <Button onclick="howToPlay()" class="how-to-play-button">HOW TO PLAY</Button>
+        <button onclick="init()" id="startButton" class="startButton">PLAY!</button>
+        <button onclick="toggleControls()" id="controls" class="controlButton">SHOW CONTROLS</button>
     </div>
 
-    <div id="controlsDiv" class="controls" style="display: none;">
-        <div>
-            <div>JUMP = Space</div>
-            <div>Throw = Up</div>
-
-        </div>
-        <div>
-            <div>Walk = Left/Right Arrow</div>
-            <div>Restart = R</div>
+    <div id="controlsDiv" class="controls">
+        <div class="keyboardSpace">Jump</div>
+        <div class="keyboardButton r">R<br/>Reset</div> 
+        <div class="keyboardArrows">
+            <div class="row up">
+                <div class="keyboardButton">↑<br/>Throw</div> 
+            </div>
+            <div class="row">
+                <div class="keyboardButton left">←<br/>Left</div>
+                <div class="keyboardButton"></div>
+                <div class="keyboardButton">→<br/>Right</div> 
+            </div>
         </div>
     </div>
 
+    <div id="howToPlayOverlay" class="howToPlayOverlay" style="display: none;">
+        <div class="howToPlayContent">
+            <h2>How to Play</h2>
+            <p>
+                Pepe, a Mexican chicken vendor, lived a peaceful life until one day the chickens had enough.
+                They rebelled against Pepe, leaving him in a difficult situation. Now it's up to you to help
+                Pepe navigate through the chaos and restore balance.
+            </p>
+            <p><strong>Your Goal:</strong></p>
+            <ul>
+                <li>Collect <strong>coins</strong> to maximize your progress.</li>
+                <li>Gather <strong>bottles</strong> to use as weapons.</li>
+                <li>Avoid enemy chickens or defeat them with skilled jumps and bottle throws.</li>
+                <li>Face the dreaded <strong>end boss</strong> at the end and defeat it to win the game!</li>
+            </ul>
+            <p>
+                Good luck, Pepe! The chickens won't make it easy, so stay alert and make the most of everything
+                you find along the way.
+            </p>
+            <button onclick="closeHowToPlay()" class="closeButton">Close</button>
+        </div>
+    </div>
+    
     <div id="touchButtons" class="touch-buttons d-none">
         <div class="touch-button-side">
-            <button class="touch-button" onclick="keyboard.LEFT = true; setTimeout(() => keyboard.LEFT = false, 200);">Left</button>
-            <button class="touch-button" onclick="keyboard.RIGHT = true; setTimeout(() => keyboard.RIGHT = false, 200);">Right</button>
+            <button class="touch-button" onmousedown="startAction('LEFT')" onmouseup="stopAction('LEFT')"
+                ontouchstart="startAction('LEFT')" ontouchend="stopAction('LEFT')">Left</button>
+            <button class="touch-button" onmousedown="startAction('RIGHT')" onmouseup="stopAction('RIGHT')"
+                ontouchstart="startAction('RIGHT')" ontouchend="stopAction('RIGHT')">Right</button>
         </div>
         <div>
             <button class="reset-button" onclick="resetGame()">Reset</button>
         </div>
         <div class="touch-button-side">
-            <button class="touch-button" onclick="keyboard.JUMP = true; setTimeout(() => keyboard.JUMP = false, 200);">Jump</button>
-            <button class="touch-button" onclick="keyboard.THROW = true; setTimeout(() => keyboard.THROW = false, 200);">Throw</button>
+            <button class="touch-button" onmousedown="startAction('JUMP')" onmouseup="stopAction('JUMP')"
+                ontouchstart="startAction('JUMP')" ontouchend="stopAction('JUMP')">Jump</button>
+            <button class="touch-button" onmousedown="startAction('THROW')" onmouseup="stopAction('THROW')"
+                ontouchstart="startAction('THROW')" ontouchend="stopAction('THROW')">Throw</button>
         </div>
     </div>
 
+
+
+    <div class="impressum">
+        <img class="impressumPNG" onclick="openImpressum()" src="img_pollo_locco/rechtssymbol.png" alt="Rechtssymbol">
+    </div>
+    
+    <div class="impressum">
+        <img class="impressumPNG" onclick="openImpressum()" src="img_pollo_locco/rechtssymbol.png" alt="Rechtssymbol">
+    </div>
+    
+    <div id="impressumOverlay" class="impressumOverlay" style="display: none;">
+        <div class="impressumContent">
+            <h2>Legal Notice</h2>
+            <p><strong>Information according to §5 TMG:</strong></p>
+            <p>
+                derKenzler<br>
+                E-Mail: <a href="mailto:musterMax@gmx.ch">musterMax@gmx.ch</a>
+            </p>
+            <hr>
+            <p><strong>Disclaimer:</strong></p>
+            <p>
+                The content of this website has been created with the utmost care. However, we cannot guarantee the accuracy,
+                completeness, or timeliness of the content.
+            </p>
+            <hr>
+            <p><strong>Copyright:</strong></p>
+            <p>
+                All content and works on this website are subject to copyright law. Any reproduction, editing, distribution, or
+                any kind of use outside the scope of copyright law requires the prior written consent of the respective author
+                or creator.
+            </p>
+            <button onclick="closeImpressum()" class="impressumCloseButton">Schließen</button>
+        </div>
+    </div>
+    
+    
 </body>
+
 </html>

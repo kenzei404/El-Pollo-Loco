@@ -6,7 +6,7 @@ class Endboss extends MovableObject {
     energy = 100;
     statusbar;
     alertSound = new Audio('sounds/boss chicken.mp3')
- 
+    dieing_sound = new Audio('sounds/endoss_dies.mp3')
 
     IMAGES_ALERT = [
         'img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png',
@@ -51,36 +51,41 @@ class Endboss extends MovableObject {
 
     hadFirstContact = false;
 
-    constructor(){
+    constructor() {
         super().loadImage('img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png');
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.statusbar = new Statusbar(); 
+        this.statusbar = new Statusbar();
         this.energy = 100;
         this.speed = 30;
         this.x = 3500;
         this.animate();
     }
 
-    animate(){
+    animate() {
         let i = 0;
+        this.soundPlayed = false;
         setInterval(() => {
             this.endbossStatus();
-            if (i < 8){
-            this.playAnimation(this.IMAGES_ALERT);
-            this.playEnbossAlert();
-            this.index = 0;
+            if (i < 8) {
+                this.playAnimation(this.IMAGES_ALERT);
+                this.playEnbossAlert();
+                this.index = 0;
             }
-            if (i > 8 && this.hadFirstContact){
+            if (i > 8 && this.hadFirstContact) {
                 this.playAnimation(this.IMAGES_WALKING)
                 this.huntCharacter()
-  
+
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
+                if (!this.soundPlayed && !isMuted) {
+                    this.dieing_sound.play();
+                    this.soundPlayed = true;
+                }
                 return;
             }
             if (this.isHurt()) {
@@ -94,38 +99,49 @@ class Endboss extends MovableObject {
         }, 200);
     }
 
-    playEnbossAlert(){
-        if(this.index == 0 && !isMuted) {
+    playEnbossAlert() {
+        if (this.index == 0 && !isMuted) {
             this.alertSound.play();
-            }
         }
-    
-    
+    }
+
+    isColliding(mo) {
+        const offsetX = 20;
+        const offsetY = 100;
+        const reducedWidth = 40;
+        const reducedHeight = 100;
+
+        const collision = (
+            this.x + offsetX + (this.width - reducedWidth) > mo.x &&
+            this.x + offsetX < mo.x + mo.width &&
+            this.y + offsetY + (this.height - reducedHeight) > mo.y &&
+            this.y + offsetY < mo.y + mo.height
+        );
+        return collision;
+    }
+
     huntCharacter() {
-        if (Math.abs(this.x - world.character.x) > 150) { // Abstand halten
+        if (Math.abs(this.x - world.character.x) > 150) { 
             if (this.x > world.character.x && this.hadFirstContact && !this.isDead()) {
                 this.otherDirection = false;
                 this.moveLeft();
-            }  if (this.x < world.character.x && this.hadFirstContact && !this.isDead()) {
+            } if (this.x < world.character.x && this.hadFirstContact && !this.isDead()) {
                 this.otherDirection = true;
                 this.moveRight();
             }
         } else {
-            this.attackCharacter(); // Angreifen, wenn nah genug
+            this.attackCharacter(); 
         }
     }
 
     attackCharacter() {
         this.playAnimation(this.IMAGES_ATTACK);
-        world.character.hit(10); // Beispiel: Charakter verliert 10 Lebenspunkte
-    }    
-    
+        world.character.hit(10); 
+    }
 
     endbossStatus() {
         this.statusbar.x = this.x;
         this.statusbar.y = this.y = 50;
         this.statusbar.setPercentage(this.energy);
     }
-
-    
 }

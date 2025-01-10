@@ -32,17 +32,17 @@ class ThrowableObject extends MovableObject {
         this.speedY = 20;
         this.applyGravity();
         this.throw();
-        this.i = 0; // Animation Frame Index
+        this.i = 0;
     }
 
     throw() {
         const move = () => {
             if (this.y >= 320) {
-                this.triggerSplash(); // Splash bei Bodenberührung
-                return; // Bewegung beenden
+                this.triggerSplash();
+                return;
             }
             if (!this.isExploding) {
-                this.x += this.otherDirection ? -1.1 : 1.1; // Seitliche Bewegung
+                this.x += this.otherDirection ? -1.1 : 1.1;
             }
             requestAnimationFrame(move);
         };
@@ -54,21 +54,20 @@ class ThrowableObject extends MovableObject {
             }
         }, 108);
     }
-    
 
     triggerSplash() {
         if (!this.isExploding) {
             this.isExploding = true;
-            this.speedY = 0; // Vertikale Bewegung stoppen
-            this.playAnimationOnce(this.IMAGES_BOTTLE_SPLASH); // Splash-Animation
-            this.glassBreakingSound(); // Sound abspielen
+            this.speedY = 0;
+            this.playAnimationOnce(this.IMAGES_BOTTLE_SPLASH);
+            this.glassBreakingSound(); 
         }
     }
 
     glassBreakingSound() {
         if (!this.soundPlayed && !isMuted) {
             this.glass_sound.play();
-            this.soundPlayed = true; // Verhindert mehrfaches Abspielen
+            this.soundPlayed = true; 
         }
     }
 
@@ -77,9 +76,9 @@ class ThrowableObject extends MovableObject {
             let path = images[this.i];
             this.img = this.imageCache[path];
             this.i++;
-            setTimeout(() => this.playAnimationOnce(images), 108); // Zeit pro Frame
+            setTimeout(() => this.playAnimationOnce(images), 108);
         } else {
-            this.markedForDeletion = true; // Nach der Animation entfernen
+            this.markedForDeletion = true; 
         }
     }
     

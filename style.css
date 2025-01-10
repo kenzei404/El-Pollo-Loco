@@ -6,9 +6,7 @@ canvas {
 
 @font-face {
     font-family: 'MexicanFont';
-    /* Name der Schriftart */
     src: url('fonts/mexican.ttf') format('truetype');
-    /* Pfad zur Schriftart */
 }
 
 .d-none {
@@ -41,16 +39,12 @@ canvas {
     border: 2px solid blueviolet;
     border-radius: 5px;
     transition: transform 0.3s ease, background-color 0.3s ease;
-    /* Animiert Skalierung und Farbänderung */
 }
 
 .startButton:hover {
     transform: scale(1.1);
-    /* Vergrößert den Button auf 110% */
     background-color: #ff4ff5;
-    /* Hellerer Farbton */
 }
-
 
 .controlButton {
     font-family: 'MexicanFont', cursive;
@@ -62,36 +56,106 @@ canvas {
     border: 2px solid blueviolet;
     border-radius: 5px;
     transition: transform 0.3s ease, background-color 0.3s ease;
-    /* Animiert Skalierung und Farbänderung */
 }
 
 .controlButton:hover {
     transform: scale(1.1);
-    /* Vergrößert den Button auf 110% */
     background-color: #ff00f2;
-    /* Hellerer Farbton */
-}
-
-
-.fullscreenButton {
-    cursor: pointer;
-    height: 50px;
-    width: 150px;
-    background-color: #ff00f2;
-    border: 5px solid blueviolet;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
 .controls {
-    display: flex;
+    display: none;
     font-size: 24px;
-    margin-top: 650px;
-    width: 720px;
+    margin-top: 750px;
+    width: 620px;
     justify-content: space-around;
     align-items: center;
     position: fixed;
     cursor: pointer;
+}
+
+.keyboardSpace {
+    width: 200px;
+    height: 50px;
+    background-color: #5f5f5f;
+    border: 2px solid blueviolet;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 60px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.keyboardSpace:hover {
+    transform: scale(1.1);
+    background-color: #ff4ff5;
+}
+
+.keyboardArrows {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.keyboardArrows .row {
+    display: flex;
+    gap: 5px;
+}
+
+.keyboardButton {
+    width: 50px;
+    height: 50px;
+    background-color: #5f5f5f;
+    border: 2px solid blueviolet;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.keyboardButton:hover {
+    transform: scale(1.1);
+    background-color: #ff4ff5;
+}
+
+.keyboardArrows .row {
+    justify-content: center;
+}
+
+.keyboardButton.r {
+    width: 50px;
+    height: 50px;
+    background-color: #5f5f5f;
+    border: 2px solid blueviolet;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 60px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.keyboardButton.r:hover {
+    transform: scale(1.1);
+    background-color: #ff4ff5;
 }
 
 body {
@@ -121,7 +185,67 @@ body {
     margin-bottom: 300px;
     margin-left: 650px;
     cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
+
+.gameSound:hover {
+    transform: scale(1.2);
+}
+
+.how-to-play-button {
+    font-family: 'MexicanFont', cursive;
+    font-size: 24px;
+    cursor: pointer;
+    height: 80px;
+    width: 150px;
+    background-color: #91208b;
+    border: 2px solid blueviolet;
+    border-radius: 5px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.how-to-play-button:hover {
+    transform: scale(1.1);
+}
+
+.howToPlayOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.howToPlayContent {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    color: black;
+}
+
+.closeButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.closeButton:hover {
+    background-color: #c9302c;
+}
+
 
 .overlay {
     position: fixed;
@@ -135,6 +259,133 @@ body {
     flex-direction: column;
 }
 
+.orientation-warning {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 24px;
+    z-index: 9999;
+}
+
+.touch-buttons {
+    width: 80%;
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    justify-content: space-between;
+}
+
+.reset-button {
+    margin-top: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    height: 40px;
+    width: 80px;
+    background-color: #7a0000;
+    border: 2px solid rgb(238, 255, 0);
+    border-radius: 5px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.touch-button-side {
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.touch-button {
+    font-size: 24px;
+    cursor: pointer;
+    height: 64px;
+    width: 80px;
+    background-color: #91208b;
+    border: 2px ;
+    border-radius: 5px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.impressumPNG {
+    cursor: pointer;
+    height: 50px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 10px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.impressumPNG:hover {
+    transform: scale(1.5);
+}
+
+.impressumOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.impressumContent {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    color: black;
+}
+
+.impressumCloseButton{
+    cursor: pointer;
+    border: solid red 2px;
+    border-radius: 4px;
+    height: 40px;
+    background-color: red;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.impressumCloseButton:hover {
+    transform: scale(1.1);
+}
+
+@media (max-width: 800px) {
+    .orientation-warning {
+        display: flex;
+    }
+
+    .controls {
+        display: none !important;
+    }
+
+    .controlButton {
+        display: none;
+    }
+}
+
+@media screen and (max-height: 1000px) {
+    .touch-buttons {
+        display: flex;
+    }
+
+    .controlButton {
+        display: none;
+    }
+}
 
 @media only screen and (max-width: 720px) {
     canvas {
@@ -174,79 +425,5 @@ body {
 
     .startScreen {
         width: 100vh;
-    }
-}
-
-/* Standardmäßig Warnung ausblenden */
-.orientation-warning {
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    color: white;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 24px;
-    z-index: 9999;
-}
-
-.touch-buttons {
-    width: 80%;
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    justify-content: space-between;
-}
-
-.reset-button {
-    margin-top: 20px;
-    font-size: 24px;
-    cursor: pointer;
-    height: 40px;
-    width: 80px;
-    background-color: #7a0000;
-    border: 2px solid rgb(238, 255, 0);
-    border-radius: 5px;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    /* Animiert Skalierung und Farbänderung */
-}
-
-.touch-button-side {
-    width: 200px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.touch-button {
-    font-size: 24px;
-    cursor: pointer;
-    height: 64px;
-    width: 80px;
-    background-color: #91208b;
-    border: 2px solid #ea00ff;
-    border-radius: 5px;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    /* Animiert Skalierung und Farbänderung */
-}
-
-/* Nur bei Geräten mit Höhe zwischen 500px und 800px UND Breite kleiner als 800px */
-@media (max-width: 800px) {
-    .orientation-warning {
-        display: flex; /* Warnung sichtbar */
-    }
-}
-
-@media screen and (max-height: 1000px) {
-    .touch-buttons {
-        display: flex;
-    }
-
-    .controlButton {
-        display: none;
     }
 }

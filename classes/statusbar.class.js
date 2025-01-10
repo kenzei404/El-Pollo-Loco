@@ -12,7 +12,6 @@ class Statusbar extends DrawableObject {
     percentage = 100;
     ImagePath;
 
-
     constructor() {
         super();
         this.loadImages(this.IMAGES_HELTHBAR);

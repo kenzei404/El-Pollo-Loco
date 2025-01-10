@@ -1,5 +1,5 @@
 class Bottle extends DrawableObject {
-   
+
    height = 100;
    width = 100;
    y = 330;

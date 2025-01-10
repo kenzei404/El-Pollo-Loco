@@ -6,7 +6,7 @@ let fullscreenButton = document.getElementById('fullscreenButton');
 
 function init() {
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'r') { // "R" für Neustart
+        if (event.key === 'r') { 
             window.location.reload();
         }
     });
@@ -17,7 +17,7 @@ function init() {
     document.getElementById('controls').classList.add('d-none');
     document.getElementById('startButton').classList.add('d-none');
     document.getElementById('canvas').classList.remove('d-none'); 
-    document.getElementById('touchButtons').classList.remove('d-none'); // Nur hier sichtbar machen
+    document.getElementById('touchButtons').classList.remove('d-none');
     document.getElementById('controlsDiv').style.display = 'none';
     document.getElementById('gameSound').style.marginBottom = '420px';
 }
@@ -28,11 +28,35 @@ function resetGame(){
 
 function toggleControls() {
     const controlsDiv = document.getElementById('controlsDiv');
-    if (controlsDiv.style.display === 'none') {
+    const currentDisplay = controlsDiv.style.display || window.getComputedStyle(controlsDiv).display;
+
+    if (currentDisplay === 'none') {
         controlsDiv.style.display = 'flex';
+        document.getElementById('controls').innerHTML = 'Hide Controls';
     } else {
         controlsDiv.style.display = 'none';
+        document.getElementById('controls').innerHTML = 'Show Controls';
     }
+}
+
+function openImpressum() {
+    let impressumOverlay = document.getElementById('impressumOverlay');
+    impressumOverlay.style.display = 'flex'; // Overlay anzeigen
+}
+
+function closeImpressum() {
+    let impressumOverlay = document.getElementById('impressumOverlay');
+    impressumOverlay.style.display = 'none'; // Overlay ausblenden
+}
+
+function howToPlay() {
+    const overlay = document.getElementById('howToPlayOverlay');
+    overlay.style.display = 'flex'; // Overlay anzeigen
+}
+
+function closeHowToPlay() {
+    const overlay = document.getElementById('howToPlayOverlay');
+    overlay.style.display = 'none'; // Overlay ausblenden
 }
 
 let isMuted = false;
@@ -57,8 +81,6 @@ function toggleMute() {
     muteButton.src = isMuted
         ? "img_pollo_locco/soundOff.png"
         : "img_pollo_locco/soundOn.png";
-
-    console.log(isMuted ? "Sound ist stummgeschaltet" : "Sound ist aktiviert");
 }
 
 function restoreMuteState() {
@@ -125,3 +147,11 @@ document.addEventListener("keyup", (e) => {
         keyboard.JUMP = false;
     }
 });
+
+function startAction(action) {
+    keyboard[action] = true;
+}
+
+function stopAction(action) {
+    keyboard[action] = false;
+}

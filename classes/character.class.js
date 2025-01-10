@@ -4,6 +4,8 @@ class Character extends MovableObject {
     speed = 10;
     world;
     running_sound = new Audio('sounds/pepe_walking.wav');
+    snoring_sound = new Audio('sounds/snoring.mp3');
+    hurt_sound = new Audio('sounds/pepe_hurt.mp3');
     isIdleActive = false;
 
 
@@ -74,6 +76,8 @@ class Character extends MovableObject {
     constructor() {
         super().loadImage('img_pollo_locco/img/2_character_pepe/1_idle/idle/I-1.png');
         this.running_sound = new Audio('sounds/pepe_walking.wav');
+        this.snoring_sound = new Audio('sounds/snoring.mp3');
+        this.hurt_sound = new Audio('sounds/pepe_hurt.mp3');
         if (!window.allAudioObjects) {
             window.allAudioObjects = [];
         }
@@ -151,6 +155,8 @@ class Character extends MovableObject {
             }
             if (this.isHurt() && this.y > 175) {
                 this.playAnimation(this.IMAGES_HURT);
+                if (!isMuted){
+                this.hurt_sound.play();}
                 this.isIdleActive = false;
                 this.stopIdleAnimation(); 
             }
@@ -164,21 +170,18 @@ class Character extends MovableObject {
     startIdleAnimation() {
         if (!this.isIdleActive && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
             this.isIdleActive = true;
-    
-            // Starte die kurze Idle-Animation für 10 Sekunden
             this.idleInterval = setInterval(() => {
                 if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_IDLE_SHORT);
                 } else {
-                    this.stopIdleAnimation(); // Bewegung stoppt alles
+                    this.stopIdleAnimation(); 
                 }
-            }, 150); // Zeit pro Frame (entsprechend der Animationsgeschwindigkeit)
+            }, 150); 
     
-            // Nach 10 Sekunden zur langen Idle-Animation wechseln
             this.idleTimeout = setTimeout(() => {
-                clearInterval(this.idleInterval); // Stoppe die kurze Animation
-                this.startLongIdleAnimation();   // Starte die lange Animation
-            }, 7000); // 10 Sekunden
+                clearInterval(this.idleInterval); 
+                this.startLongIdleAnimation(); 
+            }, 7000);
         }
     }
     
@@ -186,26 +189,27 @@ class Character extends MovableObject {
         this.idleInterval = setInterval(() => {
             if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_IDLE_LONG);
-            } else {
-                this.stopIdleAnimation(); // Bewegung stoppt alles
+                if (!isMuted) {
+                this.snoring_sound.play();
             }
-        }, 300); // Zeit pro Frame (entsprechend der Animationsgeschwindigkeit)
+            } else {
+                this.stopIdleAnimation();
+                this.snoring_sound.pause();} 
+        }, 300);
     }
     
     stopIdleAnimation() {
-        // Stoppe das Timeout für den Übergang zur langen Animation
         if (this.idleTimeout) {
             clearTimeout(this.idleTimeout);
             this.idleTimeout = null;
         }
-    
-        // Stoppe das Intervall der laufenden Animation
         if (this.idleInterval) {
             clearInterval(this.idleInterval);
             this.idleInterval = null;
         }
-    
-        this.isIdleActive = false; // Setze den Zustand zurück
+        this.snoring_sound.pause();
+        this.snoring_sound.currentTime = 0;
+        this.isIdleActive = false; 
     }
     
     playAnimationOnce(images, callback) {

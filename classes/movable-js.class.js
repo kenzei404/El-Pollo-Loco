@@ -26,7 +26,6 @@ class MovableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
-
     }  
 
     isDead() {
@@ -56,7 +55,6 @@ class MovableObject extends DrawableObject {
         }
     }
     
-
     moveRight() {
         this.x += this.speed;
     }

@@ -18,16 +18,16 @@ class World {
     coin;
     throwedObjects = 0;
     gameOverScreen = null;
-    endTime = null; // Zeitpunkt, an dem das Spiel endet
-    isGameOverTriggered = false; // Neues Flag in der World-Klasse
+    endTime = null;
+    isGameOverTriggered = false;
 
     constructor(canvas, keyboard) {
-        this.isGameOver = false; // Flag für Spielende
+        this.isGameOver = false; 
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.startTime = Date.now(); // Startzeit des Spiels
-        this.collectedCoins = 0; // Gesammelte Coins
+        this.startTime = Date.now(); 
+        this.collectedCoins = 0;
         this.totalCoins = this.level.coins.length;
         this.draw();
         this.setWorld();
@@ -39,9 +39,9 @@ class World {
     }
 
     getElapsedTime() {
-        const endTime = this.endTime ? this.endTime : Date.now(); // Endzeit oder aktuelle Zeit
-        const elapsedTime = (endTime - this.startTime) / 1000; // Zeit in Sekunden
-        return elapsedTime.toFixed(2); // Auf 2 Nachkommastellen
+        const endTime = this.endTime ? this.endTime : Date.now();
+        const elapsedTime = (endTime - this.startTime) / 1000; 
+        return elapsedTime.toFixed(2);
     }
 
     setWorld() {
@@ -55,7 +55,7 @@ class World {
             this.gameOver();
             this.checkEndbossHit();
             this.gameSound();
-            this.checkThrowableObjectCollision(); // New function call
+            this.checkThrowableObjectCollision();
         }, 200);
     
         setInterval(() => {
@@ -69,14 +69,14 @@ class World {
         if (!isMuted) {
             this.game_sound.play();
         } else {
-            this.game_sound.pause(); // Sound pausieren
-            this.game_sound.currentTime = 0; // Wiedergabezeit zurücksetzen
+            this.game_sound.pause();
+            this.game_sound.currentTime = 0;
         }
     }
 
     handleGameOver(isWin) {
-        this.isGameOverTriggered = true; // Markiere, dass das Spiel vorbei ist
-        this.endTime = Date.now(); // Endzeitpunkt speichern
+        this.isGameOverTriggered = true; 
+        this.endTime = Date.now();
         setTimeout(() => {
             if (isWin) {
                 this.gameOverScreen = new YouWin(this.canvas.width / 2, this.canvas.height / 2);
@@ -85,40 +85,90 @@ class World {
             }
         }, 500);
         setTimeout(() => {
-            this.endGame(); // Stoppe die Zeichen-Schleife
-            this.showEndScreen(isWin); // Zeige entsprechenden Endbildschirm
+            this.endGame(); 
+            this.showEndScreen(isWin); 
         }, 5000);
     }
     
     gameOver() {
-        if (this.isGameOverTriggered) return; // Funktion verlassen, wenn sie bereits ausgelöst wurde
+        if (this.isGameOverTriggered) return;
     
         if (this.character.isDead()) {
-            this.handleGameOver(false); // Game Over
+            this.handleGameOver(false);
         }
     
         if (this.level.endboss.isDead()) {
-            this.handleGameOver(true); // You Win
+            this.handleGameOver(true);
         }
     }    
 
     showEndScreen(isWin) {
-        const ctx = this.ctx;
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        ctx.fillStyle = 'white';
-        ctx.font = '64px MexicanFont';
-        ctx.textAlign = 'center';
-        const title = isWin ? 'You Win!' : 'You Lost!';
-        ctx.fillText(title, this.canvas.width / 2, 100);
+        this.record();
         const coinPercentage = Math.round((this.coinArr / this.totalCoins) * 100);
         const elapsedTime = this.getElapsedTime();
+        const record = JSON.parse(localStorage.getItem('record'));
+    
+        this.clearScreen();
+        this.displayTitle(isWin);
+        this.displayStats(coinPercentage, elapsedTime);
+        this.displayRecord(record);
+        this.displayRestartInstructions();
+    }
+
+    displayRestartInstructions() {
+        let ctx = this.ctx;
+        ctx.fillText('Do you want to play again?', this.canvas.width / 2, 420);
+        ctx.fillText('Press "R" on PC or "Reset" on Mobile to Restart', this.canvas.width / 2, 460);
+    }
+
+    displayRecord(record) {
+        let ctx = this.ctx;
+        if (record) {
+            ctx.fillText(`Best Record:`, this.canvas.width / 2, 300);
+            ctx.fillText(`Coins: ${record.coinPercentage}%`, this.canvas.width / 2, 330);
+            ctx.fillText(`Time: ${record.elapsedTime} seconds`, this.canvas.width / 2, 360);
+        }
+    }
+
+    displayStats(coinPercentage, elapsedTime) {
+        let ctx = this.ctx;
         ctx.font = '20px MexicanFont';
         ctx.fillText(`Coins Collected: ${coinPercentage}%`, this.canvas.width / 2, 200);
         ctx.fillText(`Time Played: ${elapsedTime} seconds`, this.canvas.width / 2, 250);
-        ctx.fillText('Do you want to play again?', this.canvas.width / 2, 350);
-        ctx.fillText('Press "R" on PC or "Reset" on Mobile to Restart', this.canvas.width / 2, 400);
+    }
+    
+    displayTitle(isWin) {
+        let ctx = this.ctx;
+        ctx.fillStyle = 'white';
+        ctx.font = '64px MexicanFont';
+        ctx.textAlign = 'center';
+        let title = isWin ? 'You Win!' : 'You Lost!';
+        ctx.fillText(title, this.canvas.width / 2, 100);
+    }
+    
+    clearScreen() {
+        let ctx = this.ctx;
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    
+    record() {
+        let coinPercentage = Math.round((this.coinArr / this.totalCoins) * 100);
+        let elapsedTime = this.getElapsedTime();
+        let record = localStorage.getItem('record');
+    
+        if (!record) {
+            record = {
+                coinPercentage: coinPercentage,
+                elapsedTime: elapsedTime
+            };
+        } else {
+            record = JSON.parse(record);
+            record.coinPercentage = Math.max(record.coinPercentage, coinPercentage);
+            record.elapsedTime = Math.min(record.elapsedTime, elapsedTime);
+        }
+        localStorage.setItem('record', JSON.stringify(record));
     }
     
     checkThrow() {
@@ -153,7 +203,6 @@ class World {
             }
         });
     }
-    
     
     collectCoins() {
         let totalCoins = this.level.coins.length + this.coinArr;

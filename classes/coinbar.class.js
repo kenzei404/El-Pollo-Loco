@@ -9,10 +9,8 @@ class Coinbar extends DrawableObject {
         'img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
     ]
 
-
     percentage = 0;
     ImagePath;
-
 
     constructor() {
         super().loadImage('img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png');
@@ -30,7 +28,6 @@ class Coinbar extends DrawableObject {
         let path = this.IMAGES_COINBAR[this.resolvePercentage()];
         this.img = this.imageCache[path];
     }
-
 
     resolvePercentage() {
         if (this.percentage == 100) {
