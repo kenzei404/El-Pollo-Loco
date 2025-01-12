@@ -20,6 +20,7 @@ class World {
     gameOverScreen = null;
     endTime = null;
     isGameOverTriggered = false;
+    isWon;
 
     constructor(canvas, keyboard) {
         this.isGameOver = false; 
@@ -80,8 +81,10 @@ class World {
         setTimeout(() => {
             if (isWin) {
                 this.gameOverScreen = new YouWin(this.canvas.width / 2, this.canvas.height / 2);
+                this.isWon = true;
             } else {
                 this.gameOverScreen = new GameOver(this.canvas.width / 2, this.canvas.height / 2);
+                this.isWon = false;
             }
         }, 500);
         setTimeout(() => {
@@ -100,20 +103,22 @@ class World {
         if (this.level.endboss.isDead()) {
             this.handleGameOver(true);
         }
-    }    
+    }
 
     showEndScreen(isWin) {
-        this.record();
+        if (this.isWon && Math.round((this.coinArr / this.totalCoins) * 100) === 100) {
+            this.record();
+        }
         const coinPercentage = Math.round((this.coinArr / this.totalCoins) * 100);
         const elapsedTime = this.getElapsedTime();
         const record = JSON.parse(localStorage.getItem('record'));
-    
         this.clearScreen();
         this.displayTitle(isWin);
         this.displayStats(coinPercentage, elapsedTime);
         this.displayRecord(record);
         this.displayRestartInstructions();
     }
+    
 
     displayRestartInstructions() {
         let ctx = this.ctx;
@@ -123,12 +128,19 @@ class World {
 
     displayRecord(record) {
         let ctx = this.ctx;
+        ctx.font = '20px MexicanFont';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'white';
         if (record) {
             ctx.fillText(`Best Record:`, this.canvas.width / 2, 300);
             ctx.fillText(`Coins: ${record.coinPercentage}%`, this.canvas.width / 2, 330);
             ctx.fillText(`Time: ${record.elapsedTime} seconds`, this.canvas.width / 2, 360);
+        } else {
+            ctx.fillText(`No record yet.`, this.canvas.width / 2, 300);
         }
+        ctx.fillText(`* 100% of coins are required to set a record *`, this.canvas.width / 2, 400);
     }
+    
 
     displayStats(coinPercentage, elapsedTime) {
         let ctx = this.ctx;
@@ -157,18 +169,22 @@ class World {
         let coinPercentage = Math.round((this.coinArr / this.totalCoins) * 100);
         let elapsedTime = this.getElapsedTime();
         let record = localStorage.getItem('record');
-    
-        if (!record) {
-            record = {
-                coinPercentage: coinPercentage,
-                elapsedTime: elapsedTime
-            };
-        } else {
-            record = JSON.parse(record);
-            record.coinPercentage = Math.max(record.coinPercentage, coinPercentage);
-            record.elapsedTime = Math.min(record.elapsedTime, elapsedTime);
+
+        if (coinPercentage === 100) {
+            if (!record) {
+                record = {
+                    coinPercentage: coinPercentage,
+                    elapsedTime: elapsedTime
+                };
+            } else {
+                record = JSON.parse(record);
+                if (coinPercentage === 100 && elapsedTime < record.elapsedTime) {
+                    record.coinPercentage = coinPercentage;
+                    record.elapsedTime = elapsedTime;
+                }
+            }
+            localStorage.setItem('record', JSON.stringify(record));
         }
-        localStorage.setItem('record', JSON.stringify(record));
     }
     
     checkThrow() {
@@ -188,13 +204,13 @@ class World {
         this.throwableObjects.forEach((throwableObject, index) => {
             this.level.enemies.forEach((enemy) => {
                 if (throwableObject.isColliding(enemy) && !throwableObject.isExploding && !enemy.isDead()) {
-                    enemy.hit(100); // Gegner treffen
+                    enemy.hit(100);
                     if (enemy.isDead()) enemy.loadImage(enemy.IMAGE_DEAD);
                     throwableObject.triggerSplash();
                 }
             });
             if (throwableObject.isColliding(this.level.endboss) && !throwableObject.isExploding) {
-                this.level.endboss.hit(10); // Endboss treffen
+                this.level.endboss.hit(10); 
                 this.level.endbossStatusbar.setPercentage(this.level.endboss.energy);
                 throwableObject.triggerSplash();
             }
@@ -208,10 +224,9 @@ class World {
         let totalCoins = this.level.coins.length + this.coinArr;
         for (let i = 0; i < this.level.coins.length; i++) {
             if (this.character.isColliding(this.level.coins[i])) {
-                if(!isMuted){
-                this.coinSound.play();}
+                console.log("Coin collision detected!"); // Debug log
                 this.coinArr++;
-                this.level.coins.splice(i, 1)
+                this.level.coins.splice(i, 1);
                 let newPercentage = (this.coinArr / totalCoins) * 100;
                 this.coinbar.setPercentage(newPercentage);
                 break;
@@ -243,16 +258,20 @@ class World {
     }
 
     checkCollisionWithEndboss() {
+        if (this.isGameOverTriggered) return;
+    
         if (this.character.isColliding(this.level.endboss)) {
             if (this.level.endboss.isDangerous) {
-                this.character.hit(1);
+                this.character.hit(5);
                 this.character.isHurt();
                 this.statusbar.setPercentage(this.character.energy);
             }
-        };
+        }
     }
 
     checkCollisionWithEnemys() {
+        if (this.isGameOverTriggered) return;
+    
         this.level.enemies.forEach((enemy) => {
             if (!enemy.isDead() && this.character.isColliding(enemy)) {
                 if (this.isJumpingOnTopOfEnemy(this.character, enemy)) {
@@ -265,7 +284,7 @@ class World {
                     }
                 } else {
                     if (enemy.isDangerous !== false) {
-                        this.character.hit(1);
+                        this.character.hit(3);
                         this.character.isHurt();
                         this.statusbar.setPercentage(this.character.energy);
                     }
@@ -273,6 +292,7 @@ class World {
             }
         });
     }
+    
 
     isJumpingOnTopOfEnemy(character, enemy) {
         return character.y + character.height < enemy.y + enemy.height &&

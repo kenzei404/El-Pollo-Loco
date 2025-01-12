@@ -363,6 +363,10 @@ body {
     transform: scale(1.1);
 }
 
+.record-container{
+    margin: 10px;
+}
+
 @media (max-width: 800px) {
     .orientation-warning {
         display: flex;

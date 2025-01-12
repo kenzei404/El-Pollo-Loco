@@ -44,7 +44,7 @@
     <img id="gameSound" class="gameSound" onclick="toggleMute()" src="img_pollo_locco/soundOn.png" alt="Sound Icon">
 
     <div class="startScreenButtons">
-        <Button onclick="howToPlay()" class="how-to-play-button">HOW TO PLAY</Button>
+        <Button onclick="howToPlay()" id="howToPlayButton" class="how-to-play-button">HOW TO PLAY</Button>
         <button onclick="init()" id="startButton" class="startButton">PLAY!</button>
         <button onclick="toggleControls()" id="controls" class="controlButton">SHOW CONTROLS</button>
     </div>
@@ -62,6 +62,10 @@
                 <div class="keyboardButton">→<br/>Right</div> 
             </div>
         </div>
+    </div>
+
+    <div id="recordStartScreen" class="record-container d-none">
+        Best Record: <span id="recordCoins">0%</span> Coins Collected and won the Game in <span id="recordTime">0</span> seconds
     </div>
 
     <div id="howToPlayOverlay" class="howToPlayOverlay" style="display: none;">

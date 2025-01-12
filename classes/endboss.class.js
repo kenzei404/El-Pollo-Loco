@@ -59,27 +59,35 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.statusbar = new Statusbar();
-        this.energy = 100;
+        this.energy = 140;
         this.speed = 30;
-        this.x = 3500;
+        this.x = 6000;
         this.animate();
     }
 
     animate() {
         let i = 0;
         this.soundPlayed = false;
+    
         setInterval(() => {
             this.endbossStatus();
-            if (i < 8) {
+            const screenLength = 720;
+            if (Math.abs(this.x - world.character.x) < screenLength && !this.hadFirstContact) {
                 this.playAnimation(this.IMAGES_ALERT);
                 this.playEnbossAlert();
-                this.index = 0;
+                this.index = 0; 
             }
+    
+            if (Math.abs(this.x - world.character.x) < screenLength && !this.hadFirstContact) {
+                i = 0; 
+                this.hadFirstContact = true;
+            }
+    
             if (i > 8 && this.hadFirstContact) {
-                this.playAnimation(this.IMAGES_WALKING)
-                this.huntCharacter()
-
+                this.playAnimation(this.IMAGES_WALKING);
+                this.huntCharacter();
             }
+    
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
                 if (!this.soundPlayed && !isMuted) {
@@ -88,17 +96,15 @@ class Endboss extends MovableObject {
                 }
                 return;
             }
+    
             if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             }
+    
             i++;
-            if (world.character.x > 2800 && !this.hadFirstContact) {
-                i = 0;
-                this.hadFirstContact = true;
-            }
         }, 200);
     }
-
+    
     playEnbossAlert() {
         if (this.index == 0 && !isMuted) {
             this.alertSound.play();

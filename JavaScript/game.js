@@ -18,6 +18,8 @@ function init() {
     document.getElementById('startButton').classList.add('d-none');
     document.getElementById('canvas').classList.remove('d-none'); 
     document.getElementById('touchButtons').classList.remove('d-none');
+    document.getElementById('howToPlayButton').classList.add('d-none');
+    document.getElementById('recordStartScreen').classList.add('d-none');
     document.getElementById('controlsDiv').style.display = 'none';
     document.getElementById('gameSound').style.marginBottom = '420px';
 }
@@ -39,24 +41,39 @@ function toggleControls() {
     }
 }
 
+function displayStartScreenRecord() {
+    let record = localStorage.getItem('record');
+    const recordContainer = document.getElementById('recordStartScreen');
+    if (record) {
+        record = JSON.parse(record);
+        document.getElementById('recordCoins').textContent = `${record.coinPercentage}%`;
+        document.getElementById('recordTime').textContent = record.elapsedTime;
+        recordContainer.classList.remove('d-none');
+    } else {
+        recordContainer.classList.add('d-none');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', displayStartScreenRecord);
+
 function openImpressum() {
     let impressumOverlay = document.getElementById('impressumOverlay');
-    impressumOverlay.style.display = 'flex'; // Overlay anzeigen
+    impressumOverlay.style.display = 'flex';
 }
 
 function closeImpressum() {
     let impressumOverlay = document.getElementById('impressumOverlay');
-    impressumOverlay.style.display = 'none'; // Overlay ausblenden
+    impressumOverlay.style.display = 'none';
 }
 
 function howToPlay() {
     const overlay = document.getElementById('howToPlayOverlay');
-    overlay.style.display = 'flex'; // Overlay anzeigen
+    overlay.style.display = 'flex'; 
 }
 
 function closeHowToPlay() {
     const overlay = document.getElementById('howToPlayOverlay');
-    overlay.style.display = 'none'; // Overlay ausblenden
+    overlay.style.display = 'none';
 }
 
 let isMuted = false;
@@ -117,13 +134,13 @@ document.addEventListener("keydown", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = true;
     }
-    if (e.keyCode == 38) {
+    if (e.keyCode == 32) {
         keyboard.THROW = true;
     }
     if (e.keyCode == 40) {
         keyboard.DOWN = true;
     }
-    if (e.keyCode == 32) {
+    if (e.keyCode == 38) {
         keyboard.JUMP = true;
     }
 });
@@ -137,13 +154,13 @@ document.addEventListener("keyup", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = false;
     }
-    if (e.keyCode == 38) {
+    if (e.keyCode == 32) {
         keyboard.THROW = false;
     }
     if (e.keyCode == 40) {
         keyboard.DOWN = false;
     }
-    if (e.keyCode == 32) {
+    if (e.keyCode == 38) {
         keyboard.JUMP = false;
     }
 });
