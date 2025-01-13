@@ -93,22 +93,6 @@ class Character extends MovableObject {
         this.applyGravity();
     }
 
-
-    isColliding(mo) {
-        const offsetX = 20;
-        const offsetY = 100;
-        const reducedWidth = 40;
-        const reducedHeight = 100;
-
-        const collision = (
-            this.x + offsetX + (this.width - reducedWidth) > mo.x &&
-            this.x + offsetX < mo.x + mo.width &&
-            this.y + offsetY + (this.height - reducedHeight) > mo.y &&
-            this.y + offsetY < mo.y + mo.height
-        );
-        return collision;
-    }
-
     animate() {
         setInterval(() => {
             this.running_sound.pause();

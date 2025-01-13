@@ -223,8 +223,11 @@ class World {
     collectCoins() {
         let totalCoins = this.level.coins.length + this.coinArr;
         for (let i = 0; i < this.level.coins.length; i++) {
-            if (this.character.isColliding(this.level.coins[i])) {
-                console.log("Coin collision detected!"); // Debug log
+            let coin = this.level.coins[i];
+            if (coin instanceof Coin && coin.isColliding(this.character)) {
+                if (!isMuted) {
+                    this.coinSound.play();
+                }
                 this.coinArr++;
                 this.level.coins.splice(i, 1);
                 let newPercentage = (this.coinArr / totalCoins) * 100;
@@ -233,19 +236,21 @@ class World {
             }
         }
     }
-
+    
     collectBottles() {
         let totalBottles = this.level.bottles.length + this.bottleArr;
         for (let i = 0; i < this.level.bottles.length; i++) {
-            if (this.character.isColliding(this.level.bottles[i])) {
+            let bottle = this.level.bottles[i];
+            if (bottle instanceof Bottle && this.character.isColliding(bottle)) { // Sicherstellen, dass es ein Bottle-Objekt ist
                 this.bottleArr++;
-                this.level.bottles.splice(i, 1)
+                this.level.bottles.splice(i, 1); // Entferne die Flasche aus dem Level
                 let newPercentage = (this.bottleArr / totalBottles) * 100;
-                this.bottlebar.setPercentage(newPercentage);
+                this.bottlebar.setPercentage(newPercentage); // Aktualisiere die Anzeige
                 break;
             }
         }
     }
+    
 
     checkEndbossHit() {
         this.throwableObjects.forEach((throwableObject) => {

@@ -81,5 +81,21 @@ class ThrowableObject extends MovableObject {
             this.markedForDeletion = true; 
         }
     }
+
+    isColliding(mo) {
+        let offsetX = 100; 
+        let offsetY = 100;
+        let reducedWidth = 100;
+        let reducedHeight = 100;
+    
+        const collision = (
+            this.x + offsetX + (this.width - reducedWidth) > mo.x &&
+            this.x + offsetX < mo.x + mo.width &&
+            this.y + offsetY + (this.height - reducedHeight) > mo.y &&
+            this.y + offsetY < mo.y + mo.height
+        );
+        console.log(`bottle`); // Debug
+        return collision;
+    }
     
 }

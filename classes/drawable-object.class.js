@@ -13,19 +13,7 @@ class DrawableObject {
     }
 
     draw(ctx) {
-        // Draw the coin image
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    
-        // Visualize the hitbox
-        ctx.beginPath();
-        ctx.rect(
-            this.x + 30, // Adjust according to offsetX
-            this.y + 30, // Adjust according to offsetY
-            this.width - 60, // Adjust according to reducedWidth
-            this.height - 60 // Adjust according to reducedHeight
-        );
-        ctx.strokeStyle = 'red'; // Set hitbox color to red for debugging
-        ctx.stroke();
     }
     
     

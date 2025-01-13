@@ -59,7 +59,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.statusbar = new Statusbar();
-        this.energy = 140;
+        this.energy = 100;
         this.speed = 30;
         this.x = 6000;
         this.animate();
@@ -111,21 +111,6 @@ class Endboss extends MovableObject {
         }
     }
 
-    isColliding(mo) {
-        const offsetX = 20;
-        const offsetY = 100;
-        const reducedWidth = 40;
-        const reducedHeight = 100;
-
-        const collision = (
-            this.x + offsetX + (this.width - reducedWidth) > mo.x &&
-            this.x + offsetX < mo.x + mo.width &&
-            this.y + offsetY + (this.height - reducedHeight) > mo.y &&
-            this.y + offsetY < mo.y + mo.height
-        );
-        return collision;
-    }
-
     huntCharacter() {
         if (Math.abs(this.x - world.character.x) > 150) { 
             if (this.x > world.character.x && this.hadFirstContact && !this.isDead()) {
@@ -149,5 +134,20 @@ class Endboss extends MovableObject {
         this.statusbar.x = this.x;
         this.statusbar.y = this.y = 50;
         this.statusbar.setPercentage(this.energy);
+    }
+
+    isColliding(mo) {
+        let offsetX = 300; 
+        let offsetY = 100;
+        let reducedWidth = 500;
+        let reducedHeight = 0;
+    
+        const collision = (
+            this.x + offsetX + (this.width - reducedWidth) > mo.x &&
+            this.x + offsetX < mo.x + mo.width &&
+            this.y + offsetY + (this.height - reducedHeight) > mo.y &&
+            this.y + offsetY < mo.y + mo.height
+        );
+        return collision;
     }
 }

@@ -134,13 +134,13 @@ document.addEventListener("keydown", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = true;
     }
-    if (e.keyCode == 32) {
+    if (e.keyCode == 38) {
         keyboard.THROW = true;
     }
     if (e.keyCode == 40) {
         keyboard.DOWN = true;
     }
-    if (e.keyCode == 38) {
+    if (e.keyCode == 32) {
         keyboard.JUMP = true;
     }
 });
@@ -154,13 +154,13 @@ document.addEventListener("keyup", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = false;
     }
-    if (e.keyCode == 32) {
+    if (e.keyCode == 38) {
         keyboard.THROW = false;
     }
     if (e.keyCode == 40) {
         keyboard.DOWN = false;
     }
-    if (e.keyCode == 38) {
+    if (e.keyCode == 32) {
         keyboard.JUMP = false;
     }
 });
