@@ -44,6 +44,9 @@ class ThrowableObject extends MovableObject {
             if (!this.isExploding) {
                 this.x += this.otherDirection ? -1.1 : 1.1;
             }
+            if (this.isExploding) {
+                this.speedY = 0;
+            }
             requestAnimationFrame(move);
         };
         move();
@@ -94,7 +97,6 @@ class ThrowableObject extends MovableObject {
             this.y + offsetY + (this.height - reducedHeight) > mo.y &&
             this.y + offsetY < mo.y + mo.height
         );
-        console.log(`bottle`); // Debug
         return collision;
     }
     

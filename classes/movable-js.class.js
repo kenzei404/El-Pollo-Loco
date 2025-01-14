@@ -8,7 +8,6 @@ class MovableObject extends DrawableObject {
     lastHit = 0;
     i = 0;
 
-
     isColliding(mo) {
         const collision = (
             this.x + this.width > mo.x && 
@@ -40,13 +39,26 @@ class MovableObject extends DrawableObject {
 
     applyGravity() {
         setInterval(() => {
-            if (this.isAboveGround() || this.speedY > 0) {
-                this.y -= this.speedY;
-                this.speedY -= this.acceleration;
+            if (this instanceof ThrowableObject) {// Logik speziell für ThrowableObject
+                if (this.isAboveGround() || this.speedY > 0) {
+                    this.y -= this.speedY;          // Bewegung nach oben oder unten
+                    this.speedY -= this.acceleration; // Geschwindigkeit reduzieren (Beschleunigung nach unten)
+                } else {
+                    this.y = 320;  // Bodenhöhe fixieren (z. B. Flasche landet bei y=320)
+                    this.speedY = 0; // Geschwindigkeit stoppen
+                }
+            } else {// Logik für andere Objekte
+                if (this.isAboveGround() || this.speedY > 0) {
+                    this.y -= this.speedY;
+                    this.speedY -= this.acceleration;
+                } else {
+                    this.y = 180; // Bodenhöhe fixieren für Standardobjekte
+                    this.speedY = 0; // Geschwindigkeit stoppen
+                }
             }
-        }, 1000 / 25)
+        }, 1000 / 25); // 25 FPS
     }
-
+    
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return this.y < 320; // Gravitation stoppt, wenn die Flasche den Boden erreicht

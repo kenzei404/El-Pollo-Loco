@@ -39,19 +39,31 @@
     <img id="startScreen" class="startScreen" src="img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png"
         alt="">
     <div class="canvas-container">
-        <canvas id="canvas" width="720px" height="480px" class="d-none"></canvas>
+        <canvas class="canvas" id="canvas" width="720px" height="480px" class="d-none"></canvas>
     </div>
-    <img id="gameSound" class="gameSound" onclick="toggleMute()" src="img_pollo_locco/soundOn.png" alt="Sound Icon">
+  
+    <div class="headIcons d-none" id="resetButtons">
+        <!-- Simulate the 'h' key to navigate home -->
+        <img src="img_pollo_locco/home.png" class="reset-button" onclick="simulateKeyPress('h')">
+    
+        <!-- Simulate the 'r' key to restart the game -->
+        <img src="img_pollo_locco/undo.png" class="reset-button" onclick="simulateKeyPress('r')">
+    
+        <!-- Mute/unmute the game sound -->
+        <img id="gameSound" class="gameSound" onclick="toggleMute()" src="img_pollo_locco/soundOn.png" alt="Sound Icon">
+    </div>
+     
 
     <div class="startScreenButtons">
-        <Button onclick="howToPlay()" id="howToPlayButton" class="how-to-play-button">HOW TO PLAY</Button>
         <button onclick="init()" id="startButton" class="startButton">PLAY!</button>
+        <Button onclick="howToPlay()" id="howToPlayButton" class="how-to-play-button">HOW TO PLAY</Button>
         <button onclick="toggleControls()" id="controls" class="controlButton">SHOW CONTROLS</button>
     </div>
 
     <div id="controlsDiv" class="controls">
         <div class="keyboardSpace">Jump</div>
         <div class="keyboardButton r">R<br/>Reset</div> 
+        <div class="keyboardButton r">H<br/>Home</div> 
         <div class="keyboardArrows">
             <div class="row up">
                 <div class="keyboardButton">↑<br/>Throw</div> 
@@ -97,10 +109,7 @@
                 ontouchstart="startAction('LEFT')" ontouchend="stopAction('LEFT')">Left</button>
             <button class="touch-button" onmousedown="startAction('RIGHT')" onmouseup="stopAction('RIGHT')"
                 ontouchstart="startAction('RIGHT')" ontouchend="stopAction('RIGHT')">Right</button>
-        </div>
-        <div>
-            <button class="reset-button" onclick="resetGame()">Reset</button>
-        </div>
+        </div>     
         <div class="touch-button-side">
             <button class="touch-button" onmousedown="startAction('JUMP')" onmouseup="stopAction('JUMP')"
                 ontouchstart="startAction('JUMP')" ontouchend="stopAction('JUMP')">Jump</button>
@@ -109,23 +118,17 @@
         </div>
     </div>
 
-
-
-    <div class="impressum">
+    <div class="impressum" id="impressum">
         <img class="impressumPNG" onclick="openImpressum()" src="img_pollo_locco/rechtssymbol.png" alt="Rechtssymbol">
     </div>
-    
-    <div class="impressum">
-        <img class="impressumPNG" onclick="openImpressum()" src="img_pollo_locco/rechtssymbol.png" alt="Rechtssymbol">
-    </div>
-    
+
     <div id="impressumOverlay" class="impressumOverlay" style="display: none;">
         <div class="impressumContent">
             <h2>Legal Notice</h2>
             <p><strong>Information according to §5 TMG:</strong></p>
             <p>
-                derKenzler<br>
-                E-Mail: <a href="mailto:musterMax@gmx.ch">musterMax@gmx.ch</a>
+                Kenzo Kasper<br>
+                E-Mail: <a href="mailto:kenzo.kasper@gmx.ch">Kenzo.Kasper@gmx.ch</a>
             </p>
             <hr>
             <p><strong>Disclaimer:</strong></p>
